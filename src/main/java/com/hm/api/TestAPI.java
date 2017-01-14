@@ -14,7 +14,7 @@ public class TestAPI {
 
 	@RequestMapping("/test")
 	public String testUser() {
-		return "test";
+		return "test123";
 	}
 
 }
