@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping ("/forum")
 
 public class ForumAPI {
-
+@RequestMapping("/login")
     public ResponseEntity Login (@RequestParam("login")String login, @RequestParam ("pass") String pass) {
 
         return  ResponseEntity.ok(UserHolder.search(login, pass));
