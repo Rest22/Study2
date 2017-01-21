@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Topic {
     private String name;
 
-    private ArrayList<String> posts = new ArrayList<>();
+    private ArrayList<Post> posts = new ArrayList<>();
 
-    public ArrayList<String> getPosts() {
+    public ArrayList<Post> getPosts() {
         return posts;
     }
 
-    public void setPosts(ArrayList<String> posts) {
+    public void setPosts(ArrayList<Post> posts) {
         this.posts = posts;
     }
 

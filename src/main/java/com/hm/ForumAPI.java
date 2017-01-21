@@ -1,49 +1,57 @@
 package com.hm;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Set;
 
 @RestController
-@RequestMapping ("/forum")
+@RequestMapping("/forum")
 public class ForumAPI {
 
-    public static HashSet<Topic> topics = new HashSet<>();
+    public static HashMap<String, Topic> topics = new HashMap<>();
 
     @RequestMapping("/login")
-    public ResponseEntity Login (@RequestParam("login")String login, @RequestParam ("pass") String pass) {
-        return  ResponseEntity.ok(UserHolder.search(login, pass));
-
+    public ResponseEntity login(@RequestParam("login") String login, @RequestParam("pass") String pass) {
+        return ResponseEntity.ok(UserHolder.search(login, pass));
     }
 
-    @RequestMapping("/createForum")
-    public ResponseEntity createForum (@RequestParam("name")String name) {
+    @RequestMapping("/createTopic")
+    public ResponseEntity createTopic(@RequestParam("name") String name) {
         Topic topic = new Topic();
         topic.setName(name);
-        topics.add(topic);
+        topics.put(name, topic);
         return ResponseEntity.ok(topic);
     }
 
-        @RequestMapping("/getTopics")
-        public Set<Topic> getTopics() {
-            return topics;
-        }
-
-            @RequestMapping("/getTopic/{name}")
-            public ResponseEntity getTopic (@PathVariable("name") String name) {
-                return ResponseEntity
-                        .ok(topics.stream()
-                                .filter(x -> x.getName().equals(name))
-                                .findFirst()
-                                .orElse(null)
-                        );
-
-        }
+    @RequestMapping({"/getTopics", "/getForums"})
+    public Collection<Topic> getTopics() {
+        return topics.values();
     }
+
+    @RequestMapping("/getTopic/{name}")
+    public ResponseEntity getTopic(@PathVariable("name") String name) {
+        return ResponseEntity.ok(topics.get(name));
+    }
+
+    @RequestMapping(value = "/post/{name}", method = RequestMethod.POST)
+    public ResponseEntity post(@PathVariable("name") String name,
+                               @RequestParam("text") String text,
+                               @RequestParam("login") String login,
+                               @RequestParam("pass") String pass) {
+        User user = UserHolder.search(login, pass);
+        if (user == null) {
+            return ResponseEntity.status(403).body("Need authorize");
+        }
+        Post post = new Post();
+        post.setMessage(text);
+        post.setUserLogin(user.getLogin());
+        topics.get(name).getPosts().add(post);
+        return getTopic(name);
+    }
+}
+
 
 
