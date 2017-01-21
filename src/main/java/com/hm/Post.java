@@ -1,9 +1,17 @@
 package com.hm;
 
-
 public class Post {
+
     private String message;
-    private String userId;
+    private String userLogin;
+
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userId) {
+        this.userLogin = userId;
+    }
 
     public String getMessage() {
         return message;
@@ -11,13 +19,5 @@ public class Post {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 }
