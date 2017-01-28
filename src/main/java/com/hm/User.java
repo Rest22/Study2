@@ -4,10 +4,15 @@ package com.hm;
 import java.util.UUID;
 
 public class User {
+
+    private String _id;
     private String login;
     private String pass;
-    public User () {}
+    public User () {
+        this._id = UUID.randomUUID().toString();
+    }
     public User (String login, String pass) {
+        this._id = UUID.randomUUID().toString();
         this.login = login;
         this.pass = pass;
     }
