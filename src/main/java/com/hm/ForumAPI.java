@@ -1,11 +1,15 @@
 package com.hm;
 
+import com.google.gson.Gson;
+import org.bson.Document;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
+
+import static com.hm.api.DB.db;
 
 @RestController
 @RequestMapping("/forum")
@@ -14,8 +18,17 @@ public class ForumAPI {
     public static HashMap<String, Topic> topics = new HashMap<>();
 
     @RequestMapping("/login")
-    public ResponseEntity login(@RequestParam("login") String login, @RequestParam("pass") String pass) {
-        return ResponseEntity.ok(UserHolder.search(login, pass));
+    public User login(@RequestParam("login") String login, @RequestParam("pass") String pass) {
+
+        User user = new Gson().fromJson(
+                db().getCollection("user")
+            .find(Document.parse("{'login' : '"+ login +", 'pass': '"+ pass +"'}"))
+            .first()
+            .toString(),
+                User.class
+        );
+        return user;
+
     }
 
     @RequestMapping("/createTopic")
@@ -41,7 +54,7 @@ public class ForumAPI {
                                @RequestParam("text") String text,
                                @RequestParam("login") String login,
                                @RequestParam("pass") String pass) {
-        User user = UserHolder.search(login, pass);
+        User user = login (login, pass);
         if (user == null) {
             return ResponseEntity.status(403).body("Need authorize");
         }
