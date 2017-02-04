@@ -22,7 +22,7 @@ public class ForumAPI {
 
         User user = new Gson().fromJson(
                 db().getCollection("user")
-            .find(Document.parse("{'login' : '"+ login +", 'pass': '"+ pass +"'}"))
+            .find(Document.parse("{'login':'"+ login +",'pass':'"+ pass +"'}"))
             .first()
             .toJson(),
                 User.class
