@@ -24,7 +24,7 @@ public class ForumAPI {
                 db().getCollection("user")
             .find(Document.parse("{'login' : '"+ login +", 'pass': '"+ pass +"'}"))
             .first()
-            .toString(),
+            .toJson(),
                 User.class
         );
         return user;
